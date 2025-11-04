@@ -1,6 +1,7 @@
 import jwt
 from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
+
 from sqlalchemy.orm import Session
 
 from crud import get_user_by_username
@@ -43,3 +44,21 @@ def get_creator(user: UserModel = Depends(get_current_user)):
     if user.role != "creator":
         raise HTTPException(status_code=403, detail="Только Создатель может")
     return user
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
