@@ -4,14 +4,19 @@ from fastapi import APIRouter, Depends
 from fastapi import HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy import select
-from sqlalchemy.orm import Session
+
+
+import sys
+import os
+
+
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from auth import create_token, get_current_admin, get_creator
 from crud import get_users, pwd_context, get_user_by_username, create_user
 from database import get_db
 from models import UserModel
 from schemas import UserResponse, UserCreate
-
 router = APIRouter(prefix="/users", tags=["Users"])
 
 

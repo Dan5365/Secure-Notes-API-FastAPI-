@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from crud import create_user, get_user_by_username
 from database import SessionLocal, create_table
 
-from routers.users import router as users_router
+
 from routers.notes import router as notes_router
 from schemas import UserCreate
 
@@ -13,7 +13,6 @@ app = FastAPI()
 
 create_table()
 
-app.include_router(users_router)
 app.include_router(notes_router)
 
 

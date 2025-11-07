@@ -1,5 +1,10 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Header
 from sqlalchemy.orm import Session
+
+import sys
+import os
+
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from auth import get_current_user
 from crud import get_notes, get_note_by_id, update_note, delete_note, create_note
@@ -9,6 +14,13 @@ from schemas import NoteCreate, NoteUpdate
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
+@router.get("/")
+def read_notes(authorization: str = Header(None), db=Depends(get_db)):
+    if not authorization:
+        raise HTTPException(status_code=401, detail="Token required")
+    token = authorization.split(" ")[1]
+    user = get_current_user(token)
+    return get_notes(user["user_id"], db)
 
 @router.get("/notes")
 def read_notes(db: Session = Depends(get_db), current_user: UserModel = Depends(get_current_user)):

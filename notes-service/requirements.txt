@@ -1,0 +1,8 @@
+requests
+PyJWT~=2.10.1
+fastapi~=0.121.0
+SQLAlchemy~=2.0.44
+passlib~=1.7.4
+uvicorn~=0.38.0
+pydantic~=2.12.4
+python-multipart~=0.0.20
