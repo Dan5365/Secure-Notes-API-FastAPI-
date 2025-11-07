@@ -1,7 +1,7 @@
 import requests
 from fastapi import HTTPException
 
-AUTH_SERVICE_URL = "http://auth-service:8000"
+AUTH_SERVICE_URL = "http://auth-service:8001"
 
 def get_current_user(token: str):
     try:
