@@ -9,6 +9,8 @@ from sqlalchemy import select
 import sys
 import os
 
+from sqlalchemy.orm import Session
+
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from auth import create_token, get_current_admin, get_creator

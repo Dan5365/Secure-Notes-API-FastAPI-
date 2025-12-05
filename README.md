@@ -222,25 +222,25 @@ Notes Service взаимодействует с Auth Service через HTTP з�
 
 1. **Установить зависимости для Auth Service**
    ```bash
-   cd auth-service
+   cd auth_service
    pip install -r requirements.txt
    ```
 
 2. **Установить зависимости для Notes Service**
    ```bash
-   cd notes-service
+   cd notes_service
    pip install -r requirements.txt
    ```
 
 3. **Запустить Auth Service**
    ```bash
-   cd auth-service
+   cd auth_service
    python main.py
    ```
 
 4. **Запустить Notes Service** (в отдельном терминале)
    ```bash
-   cd notes-service
+   cd notes_service
    python main.py
    ```
 

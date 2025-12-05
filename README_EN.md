@@ -220,25 +220,25 @@ The project uses **Pydantic** for comprehensive data validation at the API layer
 
 1. **Install dependencies for Auth Service**
    ```bash
-   cd auth-service
+   cd auth_service
    pip install -r requirements.txt
    ```
 
 2. **Install dependencies for Notes Service**
    ```bash
-   cd notes-service
+   cd notes_service
    pip install -r requirements.txt
    ```
 
 3. **Run Auth Service**
    ```bash
-   cd auth-service
+   cd auth_service
    python main.py
    ```
 
 4. **Run Notes Service** (in a separate terminal)
    ```bash
-   cd notes-service
+   cd notes_service
    python main.py
    ```
 
