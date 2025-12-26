@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+*.manifest
+*.spec
+
+# Virtual environment
+venv/
+env/
+ENV/
+
+# JetBrains IDE
+.idea/
+
+# Byte-compiled / optimized / DLL files
+*.pyc
+*.pyo
+*.pyd
+
+# Logs and databases
+*.log
+*.sqlite3
+
+# Distribution / packaging
+.Python
+pip-wheel-metadata/
+*.egg-info/
+dist/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pytest
+.cache/
+
+# Coverage reports
+htmlcov/
+.coverage
+
+# VSCode settings (если используешь)
+.vscode/
+
+# Others
+*.env
