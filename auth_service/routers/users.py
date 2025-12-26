@@ -67,3 +67,4 @@ def make_admin(user_id: int, db: Session = Depends(get_db), creator=Depends(get_
     user.role = "admin"
     db.commit()
     return {"message": f"{user.username} теперь админ"}
+

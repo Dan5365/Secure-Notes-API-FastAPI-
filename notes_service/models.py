@@ -8,7 +8,7 @@ class NoteModel(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str]
     content: Mapped[str]
-    owner_id: Mapped[int]  # просто int, без ForeignKey
+    owner_id: Mapped[int]
     created_at: Mapped[datetime.datetime] = mapped_column(
         default=lambda: datetime.datetime.now(datetime.timezone.utc)
     )

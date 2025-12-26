@@ -19,21 +19,33 @@ def create_token(user: UserSchema):
     return {"access_token": encoded, "token_type": "bearer"}
 
 
-def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)) -> UserModel:
+def decode_and_get_user(token: str, db: Session) -> UserModel:
+
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
         username: str = payload.get("sub")
-        if username is None:
+        if not username:
             raise HTTPException(status_code=401, detail="Invalid token")
     except jwt.PyJWTError:
         raise HTTPException(status_code=401, detail="Invalid token")
 
     user = get_user_by_username(username, db)
-    if user is None:
-        raise HTTPException(status_code=401, detail="User not found")
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
 
     return user
 
+def get_current_user(
+    token: str = Depends(oauth2_scheme),
+    db: Session = Depends(get_db)
+) -> UserModel:
+    return decode_and_get_user(token, db)
+
+
+@router.get("/verify-token")
+def verify_token(token: str, db: Session = Depends(get_db)):
+    user = decode_and_get_user(token, db)
+    return {"user_id": user.id, "username": user.username, "role": user.role}
 
 def get_current_admin(user: UserModel = Depends(get_current_user)):
     if user.role not in ["admin", "creator"]:
@@ -47,21 +59,7 @@ def get_creator(user: UserModel = Depends(get_current_user)):
     return user
 
 
-@router.get("/verify-token")
-def verify_token(token: str, db: Session = Depends(get_db)):
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-        username: str = payload.get("sub")
-        if not username:
-            raise HTTPException(status_code=401, detail="Invalid token")
-    except jwt.PyJWTError:
-        raise HTTPException(status_code=401, detail="Invalid token")
 
-    user = get_user_by_username(username, db)
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-
-    return {"user_id": user.id, "username": user.username, "role": user.role}
 
 
 

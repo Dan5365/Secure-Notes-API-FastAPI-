@@ -17,10 +17,7 @@ app.include_router(users_router)
 
 
 def init_creator():
-    """
-      Однократная функция для создания пользователя 'Создатель' с ролью 'creator'.
-      После того как пользователь создан, этот код можно закомментировать или удалить.
-      """
+
     create_table()
     db = SessionLocal()
     try:
@@ -35,13 +32,14 @@ def init_creator():
 """
 При надобности разкомментируйте эту функцию
 """
-
-
 # init_creator()
 
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
+
+
+
 
 
 if __name__ == "__main__":

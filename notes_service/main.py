@@ -1,9 +1,6 @@
 import uvicorn
 from fastapi import FastAPI
-
-
 from database import create_table
-
 
 from routers.notes import router as notes_router
 

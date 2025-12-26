@@ -1,14 +1,16 @@
 services:
   auth-service:
-    build: auth_service
+    build: ./auth_service
     container_name: auth_service
     ports:
-      - "8001:8000"
+      - "8000:8000"
 
   notes-service:
-    build: notes_service
+    build: ./notes_service
     container_name: notes_service
-    ports:
-      - "8002:8000"
     depends_on:
       - auth-service
+    environment:
+      - AUTH_SERVICE_URL=http://auth-service:8000
+    ports:
+      - "8001:8000"
