@@ -20,5 +20,5 @@ class NoteUpdate(NoteCreate):
     pass
 
 
-class NoteResponse(NoteCreate):
+class NoteResponse(NoteSchema):
     pass

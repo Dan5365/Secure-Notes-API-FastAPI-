@@ -2,10 +2,10 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from auth_client import get_current_user
-from crud import get_notes, get_note_by_id, update_note, delete_note, create_note
-from database import get_db
-from schemas import NoteCreate, NoteUpdate, NoteResponse
+from notes_service.auth_client import get_current_user
+from notes_service.crud import get_notes, get_note_by_id, update_note, delete_note, create_note
+from notes_service.database import get_db
+from notes_service.schemas import NoteCreate, NoteUpdate, NoteResponse
 
 router = APIRouter(prefix="/notes", tags=["Notes"])
 
@@ -16,7 +16,6 @@ def read_notes(
     db: Session = Depends(get_db)
 ):
     return get_notes(current_user["user_id"], db)
-
 
 
 @router.get("/{note_id}", response_model=NoteResponse)
@@ -33,17 +32,21 @@ def read_note_by_id(
 
 
 @router.post("/", response_model=NoteResponse)
-def create_note(
+def create_note_endpoint(
     note: NoteCreate,
     current_user: dict = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    return create_note(current_user["user_id"], note, db)
+    return create_note(
+        user_id=current_user["user_id"],
+        note=note,
+        db=db
+    )
 
 
 
 @router.put("/{note_id}", response_model=NoteResponse)
-def update_note(
+def update_note_endpoint(
     note_id: int,
     note: NoteUpdate,
     current_user: dict = Depends(get_current_user),
@@ -63,7 +66,7 @@ def update_note(
 
 
 @router.delete("/{note_id}")
-def delete_note(
+def delete_note_endpoint(
     note_id: int,
     current_user: dict = Depends(get_current_user),
     db: Session = Depends(get_db)

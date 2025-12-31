@@ -1,6 +1,6 @@
 import datetime
 from sqlalchemy.orm import Mapped, mapped_column
-from database import Base
+from notes_service.database import Base
 
 class NoteModel(Base):
     __tablename__ = "notes"

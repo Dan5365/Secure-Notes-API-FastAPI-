@@ -4,10 +4,10 @@ from fastapi.security import OAuth2PasswordBearer
 
 from sqlalchemy.orm import Session
 
-from crud import get_user_by_username
-from database import get_db
-from models import UserModel
-from schemas import UserSchema
+from auth_service.crud import get_user_by_username
+from auth_service.database import get_db
+from auth_service.models import UserModel
+from auth_service.schemas import UserSchema
 
 SECRET_KEY = "my_super_secret_key"
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/users/login")

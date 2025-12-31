@@ -13,11 +13,11 @@ from sqlalchemy.orm import Session
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from auth import create_token, get_current_admin, get_creator
-from crud import get_users, pwd_context, get_user_by_username, create_user
-from database import get_db
-from models import UserModel
-from schemas import UserResponse, UserCreate
+from auth_service.auth import create_token, get_current_admin, get_creator
+from auth_service.crud import get_users, pwd_context, get_user_by_username, create_user
+from auth_service.database import get_db
+from auth_service.models import UserModel
+from auth_service.schemas import UserResponse, UserCreate
 router = APIRouter(prefix="/users", tags=["Users"])
 
 

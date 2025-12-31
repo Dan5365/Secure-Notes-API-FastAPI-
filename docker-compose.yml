@@ -14,3 +14,14 @@ services:
       - AUTH_SERVICE_URL=http://auth-service:8000
     ports:
       - "8001:8000"
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - auth-service
+      - notes-service
