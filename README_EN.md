@@ -1,395 +1,348 @@
-# Secure Notes API - Microservices Architecture
+# Intelligent Notes Platform - Full-Stack Notes Management System with AI
 
-A secure, scalable notes management system built with FastAPI using a microservices architecture. This project demonstrates modern software engineering practices including service separation, authentication, authorization, and data validation.
+[![RU](https://img.shields.io/badge/lang-RU-red)](README.md)
 
-## 🏗️ Architecture Overview
+A modern, intelligent notes management platform with artificial intelligence integration. Built on microservices architecture using FastAPI, React, and Google Gemini AI, demonstrating cutting-edge practices for developing full-stack web applications.
 
-This project follows a **microservices architecture** pattern, consisting of two independent services:
+## 🏗️ System Architecture
 
-### Services
+The project implements a **three-tier microservices architecture** with a modern frontend:
 
-1. **Auth Service** (`auth-service/`)
-   - Port: `8001` (mapped from container port `8000`)
-   - Handles user authentication, authorization, and user management
-   - Manages JWT token generation and validation
-   - Implements role-based access control (RBAC)
+### Backend Services
 
-2. **Notes Service** (`notes-service/`)
-   - Port: `8002` (mapped from container port `8000`)
-   - Handles note CRUD operations
-   - Depends on Auth Service for token verification
-   - Manages user-specific notes with ownership validation
+1. **Auth Service** (Port: `8000`)
+   - User authentication and authorization
+   - JWT token management and role system
+   - User registration and management
+   - Role-based access control (RBAC): user, admin, creator
+
+2. **Notes Service** (Port: `8001`)
+   - CRUD operations for notes
+   - Note ownership validation
+   - Integration with Auth Service for authentication
+   - Creation and update timestamps
+
+3. **AI Service** (Port: `8002`)
+   - Google Gemini AI integration
+   - Note improvement based on user instructions
+   - Analysis of all user notes
+   - Generation of ideas for new notes
+   - Local fallback algorithms when AI is unavailable
+
+### Frontend Application
+
+4. **React Frontend** (Port: `5173`)
+   - Modern SPA built with React 19 and React Router
+   - Responsive interface with Tailwind CSS
+   - Interactive AI assistant for notes
+   - JWT token authentication
+   - Real-time note updates
 
 ### Inter-Service Communication
 
-The Notes Service communicates with the Auth Service via HTTP requests to verify JWT tokens. This demonstrates a **service-to-service authentication pattern** where:
-- Notes Service acts as a client to Auth Service
-- Auth Service exposes a `/verify-token` endpoint
-- Services communicate through Docker's internal network (`auth-service:8000`)
+- **Notes ↔ Auth**: HTTP requests for token verification
+- **Frontend ↔ All Services**: REST API via Axios
+- **AI Service ↔ Gemini**: External API for AI processing
+- **Docker Network**: Internal network for service communication
+
+## 🤖 Artificial Intelligence
+
+### Google Gemini AI Integration
+
+The system includes a full-featured AI service providing:
+
+#### Note Enhancement
+- **Style Improvement**: Text formatting and structuring
+- **Summarization**: Automatic compression of long notes
+- **Paraphrasing**: Rewriting text while preserving meaning
+- **Error Correction**: Grammar and spelling checks
+- **Professionalization**: Converting to business style
+- **Simplification**: Adapting complex text for better understanding
+
+#### Note Analysis
+- Identifying main themes in note collections
+- Providing personalized recommendations
+- Suggestions for organization and structuring
+
+#### Idea Generation
+- Creating new ideas based on existing notes
+- Suggestions for topic development
+- Creative prompts for continued work
+
+#### Technical Features
+- **Fallback System**: Local algorithms when AI is unavailable
+- **Security**: Content filtering and protection against malicious input
+- **Performance**: Optimized Gemini API requests
+- **User Experience**: Intuitive interface with preset commands
 
 ## 🔐 Authentication & Authorization
 
 ### Authentication Flow
 
-1. **User Registration**: Users register with username, password, and age
-2. **User Login**: Users authenticate and receive a JWT access token
-3. **Token-Based Access**: All protected endpoints require a Bearer token in the Authorization header
+1. **Registration**: Users create accounts with username, password, and age
+2. **Login**: Authentication via login form with JWT token receipt
+3. **Protected Access**: All operations require valid Bearer token
+4. **Automatic Logout**: On token expiration or authentication errors
 
-### Role-Based Access Control (RBAC)
+### Role-Based System (RBAC)
 
-The system implements three user roles:
-
-- **`user`** (default): Standard users who can manage their own notes
-- **`admin`**: Can view all users and user information
-- **`creator`**: Highest privilege level, can promote users to admin role
+- **`user`** (default): Manage own notes
+- **`admin`**: View all users and their information
+- **`creator`**: Full privileges, including assigning administrators
 
 ### Security Features
 
-- **Password Hashing**: Uses `bcrypt` via `passlib` for secure password storage
-- **JWT Tokens**: JSON Web Tokens (HS256 algorithm) for stateless authentication
-- **Token Verification**: Centralized token validation through Auth Service
-- **OAuth2 Password Flow**: Implements OAuth2PasswordBearer for token extraction
+- **Password Hashing**: bcrypt via passlib
+- **JWT Tokens**: Stateless authentication with HS256
+- **Inter-Service Verification**: Centralized validation via Auth Service
+- **OAuth2 Flow**: Standardized authentication process
+- **Ownership Validation**: Users see only their own notes
 
-## ✅ Data Validation
+## 💻 Frontend Capabilities
 
-The project uses **Pydantic** for comprehensive data validation at the API layer:
+### Modern React Interface
 
-### User Validation
+#### Core Features
+- **Responsive Design**: Works on all devices
+- **Real-Time**: Instant note updates
+- **Intuitive UX**: Simple creation, editing, and deletion
+- **Visual Feedback**: Animations and status notifications
 
-- **Username**: 
-  - Minimum length: 3 characters
-  - Maximum length: 30 characters
-- **Age**: 
-  - Range: 0 to 120 (inclusive)
-  - Must be a valid integer
-- **Password**: 
-  - Required field
-  - Hashed before storage (never stored in plain text)
+#### AI Assistant
+- **Modal Interface**: Full-featured AI interaction interface
+- **Three Modes**: Enhancement, analysis, idea generation
+- **Preset Commands**: Quick access to popular functions
+- **Version Comparison**: Visual comparison of original and improved versions
+- **Apply Changes**: One-click note updates
 
-### Note Validation
+#### Technical Features
+- **React 19**: Latest version with improved performance
+- **React Router**: SPA navigation with protected routes
+- **Axios**: HTTP client with automatic authorization headers
+- **Tailwind CSS**: Utility-first CSS for rapid styling
+- **Vite**: Modern bundler for fast development
 
-- **Title**: 
-  - Minimum length: 1 character
-  - Maximum length: 100 characters
-  - Required field
-- **Content**: 
-  - Minimum length: 1 character
-  - Required field
-- **Timestamps**: 
-  - Automatically generated with UTC timezone
-  - `created_at`: Set on note creation
-  - `updated_at`: Updated on note modification
+## 📋 API Endpoints
 
-### Validation Benefits
-
-- **Type Safety**: Automatic type checking and conversion
-- **Input Sanitization**: Prevents invalid data from entering the system
-- **API Documentation**: FastAPI automatically generates OpenAPI docs from Pydantic models
-- **Error Messages**: Clear, descriptive validation error responses
-
-## 📋 Features
-
-### Auth Service Features
+### Auth Service (`/users`, `/auth`)
 
 #### User Management
-- **POST `/users/register`**: Register a new user
-  - Validates username uniqueness
-  - Hashes password before storage
-  - Returns user information (excluding password)
-  
-- **POST `/users/login`**: Authenticate and receive JWT token
-  - Validates credentials
-  - Returns access token and token type
-  
-- **GET `/users/users`**: List all users (Admin/Creator only)
-  - Requires admin or creator role
-  - Returns list of all registered users
-  
-- **GET `/users/users/by-username/{username}`**: Get user by username (Admin/Creator only)
-  - Requires admin or creator role
-  - Returns specific user information
+- `POST /users/register` - Register new user
+- `POST /users/login` - Login and receive JWT token
+- `GET /users/users` - List all users (Admin+)
+- `GET /users/users/by-username/{username}` - Search by username (Admin+)
+- `POST /users/users/{user_id}/make-admin` - Assign administrator (Creator)
 
-#### Role Management
-- **POST `/users/users/{user_id}/make-admin`**: Promote user to admin (Creator only)
-  - Requires creator role
-  - Updates user role to "admin"
+#### Authentication
+- `GET /auth/verify-token` - Verify token validity (for services)
 
-#### Token Verification
-- **GET `/auth/verify-token`**: Verify JWT token validity
-  - Used by Notes Service for inter-service authentication
-  - Returns user information if token is valid
+### Notes Service (`/notes`)
 
-### Notes Service Features
+#### CRUD Operations
+- `GET /notes/` - Get all user notes
+- `GET /notes/{note_id}` - Get specific note
+- `POST /notes/` - Create new note
+- `PUT /notes/{note_id}` - Update note
+- `DELETE /notes/{note_id}` - Delete note
 
-#### Note CRUD Operations
-- **GET `/users/notes`**: Get all notes for the authenticated user
-  - Requires valid JWT token
-  - Returns only notes owned by the user
-  
-- **GET `/users/notes/{note_id}`**: Get a specific note by ID
-  - Requires valid JWT token
-  - Validates note ownership
-  - Returns 404 if note doesn't exist or doesn't belong to user
-  
-- **POST `/users/notes`**: Create a new note
-  - Requires valid JWT token
-  - Automatically associates note with authenticated user
-  - Validates title and content
-  
-- **PUT `/users/notes/{note_id}`**: Update an existing note
-  - Requires valid JWT token
-  - Validates note ownership
-  - Updates `updated_at` timestamp
-  - Returns 404 if note doesn't exist or doesn't belong to user
-  
-- **DELETE `/users/notes/{note_id}`**: Delete a note
-  - Requires valid JWT token
-  - Validates note ownership
-  - Returns 404 if note doesn't exist or doesn't belong to user
+### AI Service (`/ai`)
 
-### Data Models
-
-#### User Model
-```python
-- id: int (Primary Key)
-- username: str
-- password_hash: str (bcrypt hashed)
-- age: int
-- role: str (default: "user")
-```
-
-#### Note Model
-```python
-- id: int (Primary Key)
-- title: str
-- content: str
-- owner_id: int (Foreign Key to users.id)
-- created_at: datetime (UTC)
-- updated_at: datetime (UTC)
-```
+#### AI Functions
+- `POST /ai/improve-note` - Improve note based on instruction
+- `POST /ai/analyze-notes` - Analyze all user notes
+- `POST /ai/generate-idea` - Generate new ideas
+- `GET /ai/health` - Check AI service health
 
 ## 🛠️ Technology Stack
 
-### Backend Framework
-- **FastAPI**: Modern, fast web framework for building APIs
-- **Uvicorn**: ASGI server for running FastAPI applications
+### Backend
+- **FastAPI**: Modern Python web framework
+- **SQLAlchemy 2.0**: ORM with type support
+- **SQLite**: Lightweight database
+- **Pydantic**: Data validation and serialization
+- **PyJWT**: JWT token handling
+- **passlib**: Secure password hashing
+- **Google Generative AI**: Gemini integration
 
-### Database & ORM
-- **SQLAlchemy 2.0**: Modern ORM with type hints
-- **SQLite**: Lightweight database (can be easily replaced with PostgreSQL/MySQL)
+### Frontend
+- **React 19**: Modern UI library
+- **React Router DOM**: Client-side routing
+- **Axios**: HTTP client for API requests
+- **Tailwind CSS**: Utility-first CSS framework
+- **Vite**: Fast bundler and dev server
 
-### Authentication & Security
-- **PyJWT**: JWT token encoding/decoding
-- **passlib**: Password hashing with bcrypt
-- **OAuth2**: OAuth2 password flow implementation
+### DevOps & Deployment
+- **Docker**: Service containerization
+- **Docker Compose**: Multi-service application orchestration
+- **Uvicorn**: ASGI server for FastAPI
 
-### Data Validation
-- **Pydantic 2.x**: Data validation and settings management using Python type annotations
+## 🚀 Quick Start
 
-### Containerization
-- **Docker**: Containerization for each service
-- **Docker Compose**: Orchestration of multiple services
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- Docker and Docker Compose installed
+### Requirements
+- Docker and Docker Compose
 - Python 3.8+ (for local development)
+- Node.js 18+ (for frontend)
 
-### Running with Docker Compose
-
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd Secure-Notes-API-FastAPI-
-   ```
-
-2. **Start all services**
-   ```bash
-   docker-compose up --build
-   ```
-
-3. **Access the services**
-   - Auth Service: http://localhost:8001
-   - Notes Service: http://localhost:8002
-   - Auth Service API Docs: http://localhost:8001/docs
-   - Notes Service API Docs: http://localhost:8002/docs
-
-### Running Locally (Development)
-
-1. **Install dependencies for Auth Service**
-   ```bash
-   cd auth_service
-   pip install -r requirements.txt
-   ```
-
-2. **Install dependencies for Notes Service**
-   ```bash
-   cd notes_service
-   pip install -r requirements.txt
-   ```
-
-3. **Run Auth Service**
-   ```bash
-   cd auth_service
-   python main.py
-   ```
-
-4. **Run Notes Service** (in a separate terminal)
-   ```bash
-   cd notes_service
-   python main.py
-   ```
-
-**Note**: When running locally, update `AUTH_SERVICE_URL` in `notes-service/auth_proxy.py` to `http://localhost:8001` instead of `http://auth-service:8000`.
-
-## 📡 API Usage Examples
-
-### 1. Register a New User
+### Run with Docker Compose
 
 ```bash
-curl -X POST "http://localhost:8001/users/register" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "username": "john_doe",
-    "password": "securepassword123",
-    "age": 25
-  }'
+# Clone repository
+git clone <repository-url>
+cd Secure-Notes-API-FastAPI-
+
+# Start all services
+docker-compose up --build
+
+# Access application
+# Frontend: http://localhost:5173
+# Auth API: http://localhost:8000/docs
+# Notes API: http://localhost:8001/docs
+# AI API: http://localhost:8002/docs
 ```
 
-### 2. Login and Get Token
+### Local Development
+
+#### Backend Services
 
 ```bash
-curl -X POST "http://localhost:8001/users/login" \
-  -H "Content-Type: application/x-www-form-urlencoded" \
-  -d "username=john_doe&password=securepassword123"
+# Auth Service
+cd auth_service
+pip install -r requirements.txt
+python main.py  # Port 8000
+
+# Notes Service
+cd notes_service
+pip install -r requirements.txt
+python main.py  # Port 8001
+
+# AI Service
+cd ai_service
+pip install -r requirements.txt
+python main.py  # Port 8002
 ```
 
-Response:
-```json
-{
-  "access_token": "eyJ0eXAiOiJKV1QiLCJhbGc...",
-  "token_type": "bearer"
-}
-```
-
-### 3. Create a Note
+#### Frontend
 
 ```bash
-curl -X POST "http://localhost:8002/users/notes" \
-  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "title": "My First Note",
-    "content": "This is the content of my note."
-  }'
+cd frontend
+npm install
+npm run dev  # Port 5173
 ```
 
-### 4. Get All Notes
+## 📱 Using the Application
+
+### 1. Registration and Login
+1. Open http://localhost:5173
+2. Register or log into the system
+3. Access the notes management dashboard
+
+### 2. Managing Notes
+- **Creation**: Click "Create New Note"
+- **Editing**: Click "Edit" on any note
+- **Deletion**: Use the "Delete" button
+- **AI Help**: Click "AI" to improve a note
+
+### 3. Working with AI Assistant
+1. Select a note and click the "AI" button
+2. Choose mode: Enhancement, Analysis, or Ideas
+3. For enhancement, enter instruction or select a preset
+4. Review results and apply changes
+
+## 🔧 Configuration
+
+### Environment Variables
 
 ```bash
-curl -X GET "http://localhost:8002/users/notes" \
-  -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+# AI Service
+GEMINI_API_KEY=your_gemini_api_key_here
+
+# Auth Service (for production)
+SECRET_KEY=your_secret_key_here
+ALGORITHM=HS256
+
+# Notes Service
+AUTH_SERVICE_URL=http://auth-service:8000
 ```
 
-### 5. Update a Note
+### AI Setup
 
-```bash
-curl -X PUT "http://localhost:8002/users/notes/1" \
-  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "title": "Updated Note Title",
-    "content": "Updated content here."
-  }'
-```
-
-### 6. Delete a Note
-
-```bash
-curl -X DELETE "http://localhost:8002/users/notes/1" \
-  -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
-```
-
-## 🔒 Security Considerations
-
-### Current Implementation
-- Passwords are hashed using bcrypt
-- JWT tokens for stateless authentication
-- Role-based access control
-- Input validation on all endpoints
-- Ownership validation for notes
-
-### Production Recommendations
-- Use environment variables for `SECRET_KEY` (currently hardcoded)
-- Implement token expiration and refresh tokens
-- Use HTTPS in production
-- Add rate limiting to prevent abuse
-- Implement database connection pooling
-- Use a production-grade database (PostgreSQL, MySQL)
-- Add comprehensive logging and monitoring
-- Implement CORS policies
-- Add request validation middleware
-- Consider implementing API versioning
+1. Get API key from Google AI Studio
+2. Replace `GEMINI_API_KEY` in `ai_service/ai_service.py`
+3. Change model in `MODEL_NAME` if needed
 
 ## 📁 Project Structure
 
 ```
-Secure-Notes-API-FastAPI-/
-├── auth-service/
-│   ├── __init__.py
-│   ├── main.py              # FastAPI application entry point
-│   ├── auth.py              # JWT token creation and validation
-│   ├── crud.py              # Database operations
-│   ├── database.py          # Database configuration
-│   ├── models.py            # SQLAlchemy models
-│   ├── schemas.py           # Pydantic validation schemas
-│   ├── routers/
-│   │   └── users.py         # User management endpoints
-│   ├── requirements.txt     # Python dependencies
-│   ├── Dockerfile           # Container configuration
-│   └── users.db             # SQLite database
-│
-├── notes-service/
-│   ├── __init__.py
-│   ├── main.py              # FastAPI application entry point
-│   ├── auth.py              # Local auth utilities
-│   ├── auth_proxy.py        # Inter-service auth communication
-│   ├── crud.py              # Database operations
-│   ├── database.py          # Database configuration
-│   ├── models.py            # SQLAlchemy models
-│   ├── schemas.py           # Pydantic validation schemas
-│   ├── routers/
-│   │   └── notes.py         # Notes CRUD endpoints
-│   ├── requirements.txt     # Python dependencies
-│   └── Dockerfile           # Container configuration
-│
-├── docker-compose.yml       # Service orchestration
-└── README.md                # This file
+Intelligent-Notes-Platform/
+├── auth_service/           # Authentication service
+│   ├── main.py            # FastAPI entry point
+│   ├── auth.py            # JWT logic
+│   ├── crud.py            # Database operations
+│   ├── models.py          # SQLAlchemy models
+│   ├── schemas.py         # Pydantic schemas
+│   └── routers/           # API routes
+├── notes_service/         # Notes service
+│   ├── main.py            # FastAPI entry point
+│   ├── auth_client.py     # Auth Service client
+│   ├── crud.py            # Database operations
+│   ├── models.py          # SQLAlchemy models
+│   └── routers/           # API routes
+├── ai_service/            # AI service
+│   ├── main.py            # FastAPI entry point
+│   └── ai_service.py      # Gemini AI integration
+├── frontend/              # React application
+│   ├── src/
+│   │   ├── pages/         # Page components
+│   │   ├── services/      # API clients
+│   │   └── App.jsx        # Main component
+│   ├── package.json       # Node.js dependencies
+│   └── vite.config.js     # Vite configuration
+└── docker-compose.yml     # Service orchestration
 ```
 
 ## 🧪 Testing
 
-The project includes HTTP test files for manual testing:
-- `auth-service/test_main.http`
-- `notes-service/test_main.http`
+### HTTP Tests
+- `auth_service/test_main.http` - Auth API tests
+- `notes_service/test_main.http` - Notes API tests
 
-You can use these with REST client extensions in your IDE (e.g., REST Client for VS Code).
+### Manual Testing
+1. Use Swagger UI for each service
+2. Test through frontend interface
+3. Check AI functions with various instructions
 
-## 📝 License
+## 🔒 Security
 
-This project is provided as-is for educational and demonstration purposes.
+### Current Measures
+- Password hashing with bcrypt
+- JWT tokens for stateless authentication
+- Input validation via Pydantic
+- CORS settings for secure requests
+- Resource ownership validation
+
+### Production Recommendations
+- Use environment variables for secrets
+- Configure HTTPS
+- Add rate limiting
+- Implement logging and monitoring
+- Use production database (PostgreSQL)
+- Set up backup and recovery
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+1. Fork the repository
+2. Create a feature branch
+3. Make changes with tests
+4. Submit a Pull Request
+
+## 📄 License
+
+Project provided for educational and demonstration purposes.
 
 ## 📧 Contact
 
-For questions or issues, please open an issue in the repository.
+For questions and suggestions, create an issue in the repository.
 
 ---
 
-**Built with ❤️ using FastAPI and Microservices Architecture**
-
+**Built with ❤️ using FastAPI, React, and Google Gemini AI**
