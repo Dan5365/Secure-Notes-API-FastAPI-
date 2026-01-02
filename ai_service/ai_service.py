@@ -1,25 +1,22 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 from pydantic import BaseModel
 from typing import List
 import google.generativeai as genai
-import os, json, re, time, asyncio
+import json, re
 
-from google.generativeai.types import HarmCategory, HarmBlockThreshold
+
 
 router = APIRouter(prefix="/ai", tags=["AI Assistant"])
 
 # ===== CONFIG =====
-GEMINI_API_KEY = "AIzaSyDDvYgSKYe2oDrMJM2W84QWE0kOfbtj2RU"  # ← ИСПРАВЬ ЗДЕСЬ
+GEMINI_API_KEY = "AIzaSyDDvYgSKYe2oDrMJM2W84QWE0kOfbtj2RU"
 if not GEMINI_API_KEY:
     raise RuntimeError("GEMINI_API_KEY not set")
 
 genai.configure(api_key=GEMINI_API_KEY)
 
-# Попробуй другие модели если эта не работает:
-# "gemini-1.5-flash"
-# "gemini-1.5-pro"
-# "gemini-1.0-pro"
-MODEL_NAME = "gemini-2.5-flash-lite"  # ← gemini-2.5-flash-lite может не существовать
+
+MODEL_NAME = "gemini-2.5-flash-lite"
 
 
 # ===== SCHEMAS =====

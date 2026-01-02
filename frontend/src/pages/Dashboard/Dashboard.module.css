@@ -1,0 +1,45 @@
+/* src/pages/Dashboard/Dashboard.module.css */
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  padding: 3rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.main {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.createButton {
+  align-self: flex-start;
+  background-color: #4caf50;
+  border: none;
+  padding: 0.8rem 2rem;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(76, 175, 80, 0.4);
+  transition: all 0.3s ease;
+}
+
+.createButton:hover {
+  background-color: #45a049;
+  transform: translateY(-2px);
+}
+.adminSection {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+  padding: 0 20px;
+}

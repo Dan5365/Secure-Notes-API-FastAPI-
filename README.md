@@ -187,7 +187,7 @@
 
 ```bash
 # Клонировать репозиторий
-git clone <repository-url>
+git clone <https://github.com/Dan5365/Secure-Notes-API-FastAPI->
 cd Secure-Notes-API-FastAPI-
 
 # Запустить все сервисы

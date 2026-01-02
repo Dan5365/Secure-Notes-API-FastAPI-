@@ -45,11 +45,11 @@ def init_creator():
 """
 При надобности разкомментируйте эту функцию
 """
-# init_creator()
+init_creator()
 
 @app.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "Auth-Service"}
 
 
 API_KEY = "DanmurKey"

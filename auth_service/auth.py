@@ -11,11 +11,11 @@ from auth_service.schemas import UserSchema
 
 SECRET_KEY = "my_super_secret_key"
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/users/login")
-
+# taskkill /F /IM python.exe
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
 def create_token(user: UserSchema):
-    encoded = jwt.encode({"sub": user.username}, SECRET_KEY, algorithm="HS256")
+    encoded = jwt.encode({"sub": user.username, "role": user.role}, SECRET_KEY, algorithm="HS256")
     return {"access_token": encoded, "token_type": "bearer"}
 
 

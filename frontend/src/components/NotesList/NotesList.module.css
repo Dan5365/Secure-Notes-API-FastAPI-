@@ -1,0 +1,20 @@
+/* src/components/NotesList/NotesList.module.css */
+.loading {
+  text-align: center;
+  padding: 3rem;
+  font-size: 1.5rem;
+}
+
+.empty {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 3rem;
+  text-align: center;
+  font-size: 1.3rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}

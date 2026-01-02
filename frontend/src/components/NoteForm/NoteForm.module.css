@@ -1,0 +1,70 @@
+/* src/components/NoteForm/NoteForm.module.css */
+.formContainer {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+}
+
+.formTitle {
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.input,
+.textarea {
+  padding: 0.8rem;
+  border-radius: 8px;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #333;
+  font-family: inherit;
+}
+
+.input {
+  font-size: 1.1rem;
+}
+
+.textarea {
+  font-size: 1rem;
+  resize: vertical;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 1rem;
+}
+
+.submitButton,
+.cancelButton {
+  flex: 1;
+  border: none;
+  padding: 0.8rem;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.submitButton {
+  background-color: #4caf50;
+}
+
+.submitButton:hover {
+  background-color: #45a049;
+}
+
+.cancelButton {
+  background-color: #757575;
+}
+
+.cancelButton:hover {
+  background-color: #616161;
+}

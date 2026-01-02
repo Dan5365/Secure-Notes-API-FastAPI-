@@ -1,0 +1,9 @@
+/* src/components/ErrorMessage/ErrorMessage.module.css */
+.error {
+  width: 100%;
+  max-width: 1200px;
+  background-color: rgba(255, 77, 77, 0.2);
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 77, 77, 0.5);
+}

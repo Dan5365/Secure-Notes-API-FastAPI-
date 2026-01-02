@@ -887,7 +887,7 @@ const NoteAIAssistant = ({ note, onClose, onApplyImprovement }) => {
             textAlign: 'center',
             flexShrink: 0
           }}>
-            💡 Совет: используйте конкретные инструкции для лучшего результата
+
           </div>
         )}
       </div>

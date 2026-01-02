@@ -45,8 +45,11 @@ dmypy.json
 htmlcov/
 .coverage
 
-# VSCode settings (если используешь)
+# VSCode settings
 .vscode/
 
 # Others
 *.env
+
+# Node.js dependencies
+node_modules/

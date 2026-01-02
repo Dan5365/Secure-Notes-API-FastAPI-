@@ -146,5 +146,5 @@ class TestCreateUser:
         created_user = create_user(db_session, user_data, role="admin")
         assert created_user.username == "admin_user"
         assert created_user.age == 21
-        assert created_user2.role == "admin"
+        assert created_user.role == "admin"
         assert created_user.id > 0

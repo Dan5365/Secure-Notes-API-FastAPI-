@@ -1,0 +1,313 @@
+/* src/components/AdminDropdown/AdminDropdown.module.css */
+.container {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdownButton {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dropdownButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.arrow {
+  font-size: 10px;
+  margin-left: 5px;
+}
+
+.dropdownContent {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 10px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  width: 400px;
+  max-height: 600px;
+  overflow-y: auto;
+  z-index: 1000;
+  padding: 20px;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.section {
+  margin-bottom: 20px;
+}
+
+.sectionTitle {
+  color: #333;
+  margin: 0 0 15px 0;
+  font-size: 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.userList {
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 5px;
+}
+
+.userItem {
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-bottom: 5px;
+}
+
+.userItem:hover {
+  background: #f5f5f5;
+}
+
+.userItem.selected {
+  background: #e3f2fd;
+  border-left: 4px solid #2196f3;
+}
+
+.userInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.username {
+  font-weight: 500;
+  color: #333;
+}
+
+.roleBadge {
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.roleBadge.creator {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+}
+
+.roleBadge.admin {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  color: white;
+}
+
+.roleBadge.user {
+  background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+  color: #333;
+}
+
+.divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, #ddd, transparent);
+  margin: 20px 0;
+}
+
+.searchBox {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.searchInput {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+}
+
+.searchButton {
+  background: #667eea;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.searchButton:hover {
+  background: #5a6fd8;
+}
+
+.searchButton:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.searchResult {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.selectButton {
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.selectButton:hover {
+  background: #43a047;
+}
+
+.selectedUser {
+  background: #e8f5e9;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.roleSelection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.roleSelection label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.roleSelection label:hover {
+  background: #f5f5f5;
+}
+
+.roleOption {
+  font-size: 14px;
+}
+
+.makeAdminButton {
+  width: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-bottom: 10px;
+  transition: all 0.3s;
+}
+
+.makeAdminButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.makeAdminButton:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.clearButton {
+  width: 100%;
+  background: #f5f5f5;
+  color: #666;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.clearButton:hover {
+  background: #e0e0e0;
+}
+
+.errorMessage {
+  background: #ffebee;
+  color: #c62828;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.loading {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  font-style: italic;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+  margin-top: 20px;
+}
+
+.footer small {
+  color: #666;
+}
+
+.closeButton {
+  background: #f5f5f5;
+  color: #333;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.closeButton:hover {
+  background: #e0e0e0;
+}
