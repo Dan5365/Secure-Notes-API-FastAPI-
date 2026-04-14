@@ -1,24 +1,33 @@
 services:
   auth-service:
     build: ./auth_service
+    environment:
+      CREATOR_PASSWORD: 112233
     container_name: auth_service
+    working_dir: /app
     ports:
       - "8000:8000"
+    volumes:
+      - ./auth_service/data:/app/data
+
 
   notes-service:
     build: ./notes_service
     container_name: notes_service
+    working_dir: /app
     depends_on:
       - auth-service
     environment:
-      - AUTH_SERVICE_URL=http://auth-service:8000
+      - AUTH_SERVICE_URL=http://auth_service:8000
     ports:
       - "8001:8000"
+    volumes:
+      - ./notes_service/data:/app/data
 
   frontend:
     build: ./frontend
     ports:
-      - "5173:5173"
+      - "80:80"
     volumes:
       - ./frontend:/app
       - /app/node_modules

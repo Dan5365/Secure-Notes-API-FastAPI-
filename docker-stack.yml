@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  auth-service:
+    image: danmur95/secure-notes-auth:latest
+    deploy:
+      replicas: 2
+    ports:
+      - "8000:8000"
+    environment:
+      - DOCKER_MODE=true
+    volumes:
+      - ./auth_service/data:/app/data
+    networks:
+      - secure_net
+
+  notes-service:
+    image: danmur95/secure-notes-notes:latest
+    deploy:
+      replicas: 2
+    ports:
+      - "8001:8000"
+    environment:
+      - AUTH_SERVICE_URL=http://auth-service:8000
+      - DOCKER_MODE=true
+    volumes:
+      - ./notes_service/data:/app/data
+    networks:
+      - secure_net
+
+  frontend:
+    image: danmur95/secure-notes-frontend:latest
+    ports:
+      - "80:80"
+    deploy:
+      replicas: 1
+    networks:
+      - secure_net
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./alert_rules.yml:/etc/prometheus/alert_rules.yml
+      - ./prometheus_data:/prometheus
+    networks:
+      - secure_net
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    deploy:
+      mode: global
+    networks:
+      - secure_net
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - ./grafana_data:/var/lib/grafana
+    networks:
+      - secure_net
+
+networks:
+  secure_net:
+    driver: overlay

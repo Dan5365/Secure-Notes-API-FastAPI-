@@ -1,0 +1,29 @@
+groups:
+  - name: secure_notes_alerts
+    rules:
+      - alert: ServiceDown
+        expr: up == 0
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Serivce {{ $labels.job }} is down!"
+          description: "Container {{ $labels.instance }} is not available for 30 seconds."
+
+
+      - alert: HighErrorRate
+        expr: http_requests_total{status="4xx"} > 0
+        for: 5s
+        labels:
+            severity: warning
+        annotations:
+            summary: "Warning: 4xx Errors Detected"
+            description: "Total 4xx errors: {{ $value }}"
+      - alert: SlowResponseTime
+        expr: (rate(http_request_duration_seconds_sum[1m]) / rate(http_request_duration_seconds_count[1m])) > 0.5
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Service {{ $labels.handler }} slows down"
+          description: "The average response time exceeds 500ms."

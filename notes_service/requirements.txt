@@ -3,3 +3,4 @@ fastapi~=0.121.0
 SQLAlchemy~=2.0.44
 uvicorn~=0.38.0
 pydantic~=2.12.4
+prometheus-fastapi-instrumentator==6.1.0
