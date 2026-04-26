@@ -2,69 +2,61 @@ from typing import List
 
 from fastapi import APIRouter, Depends
 from fastapi import HTTPException
-from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy import select
-
 
 import sys
 import os
 
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from auth_service.auth import create_token, get_current_admin, get_creator
-from auth_service.crud import get_users, pwd_context, get_user_by_username, create_user
-from auth_service.database import get_db
+from auth_service.crud import get_users, pwd_context, get_user_by_username, create_user, delete_user
+from auth_service.database import get_db_session
 from auth_service.models import UserModel
 from auth_service.schemas import UserResponse, UserCreate
-router = APIRouter(prefix="/users", tags=["Users"])
-
-
-@router.post("/register", response_model=UserResponse)
-def user_register(user: UserCreate, db: Session = Depends(get_db)):
-    existing_user = get_user_by_username(user.username, db)
-    if existing_user:
-        raise HTTPException(status_code=400, detail="Пользователь уже существует")
-
-    new_user = create_user(db, user)
-    return new_user
-
-
-@router.post("/login")
-def user_login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
-    user = get_user_by_username(form_data.username, db)
-    if not user:
-        raise HTTPException(status_code=401, detail="Неверный username или пароль")
-
-    if not pwd_context.verify(form_data.password, user.password_hash):
-        raise HTTPException(status_code=401, detail="Неверный username или пароль")
-
-    token = create_token(user)
-
-    return token
+router = APIRouter(tags=["Users"])
 
 
 @router.get("/users", response_model=List[UserResponse])
-def read_users(db: Session = Depends(get_db), admin=Depends(get_current_admin)):
-    return get_users(db)
+async def get_users_endpoint(db: AsyncSession = Depends(get_db_session), admin=Depends(get_current_admin)):
+    users = await get_users(db)
+    return users
 
 
-@router.get("/users/by-username/{username}", response_model=UserResponse)
-def read_user_by_username(username: str, db: Session = Depends(get_db), admin=Depends(get_current_admin)):
-    user = get_user_by_username(username, db)
+@router.get("/users/{username}", response_model=UserResponse)
+async def get_user_by_username_endpoint(username: str, db: AsyncSession = Depends(get_db_session), admin=Depends(get_current_admin)):
+    user = await get_user_by_username(username, db)
     if not user:
         raise HTTPException(status_code=404, detail="Пользователь не найден")
     return user
 
+@router.post("/users")
+async def create_user_endpoint(user: UserCreate, role:str = "user",
+                         db: AsyncSession = Depends(get_db_session)):
+    existing_user = await get_user_by_username(user.username, db)
+    if existing_user is not None:
+        raise HTTPException(status_code=400, detail="Это имя уже занято")
+    new_user = await create_user(db, user, role=role)
+    return new_user
+
+@router.delete("/users/{user_id}")
+async def delete_user_endpoint(user_id: int, db: AsyncSession = Depends(get_db_session), admin=Depends(get_current_admin)):
+    success = await delete_user(db, user_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Пользователь не найден")
+    return {"message": "Пользователь удалён"}
 
 @router.post("/users/{user_id}/make-admin")
-def make_admin(user_id: int, db: Session = Depends(get_db), creator=Depends(get_creator)):
+async def make_admin(user_id: int, db: AsyncSession = Depends(get_db_session), creator=Depends(get_creator)):
     stmt = select(UserModel).where(UserModel.id == user_id)
-    user = db.execute(stmt).scalars().first()
+    result = await db.execute(stmt)
+    user = result.scalars().first()
     if not user:
         raise HTTPException(status_code=404, detail="Пользователь не найден")
     user.role = "admin"
-    db.commit()
+    await db.commit()
     return {"message": f"{user.username} теперь админ"}
 

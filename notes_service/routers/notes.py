@@ -37,6 +37,7 @@ def create_note_endpoint(
     current_user: dict = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
+    print("Create note endpoint called")
     return create_note(
         user_id=current_user["user_id"],
         note=note,

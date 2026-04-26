@@ -12,8 +12,10 @@ def get_notes(user_id: int, db: Session):
 
 
 def get_note_by_id(note_id: int, user_id: int, db: Session):
-    stmt = select(NoteModel).where(NoteModel.id == note_id, NoteModel.owner_id == user_id)
+    stmt = select(NoteModel).where(
+        NoteModel.id == note_id, NoteModel.owner_id == user_id)
     note = db.execute(stmt).scalars().first()
+
     return note
 
 

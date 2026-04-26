@@ -1,13 +1,22 @@
+from contextlib import asynccontextmanager
 import uvicorn
 from fastapi import FastAPI, Depends
+from prometheus_fastapi_instrumentator import Instrumentator
+from fastapi.middleware.cors import CORSMiddleware
 
 from notes_service.auth_client import get_current_user
 from notes_service.database import create_table
-from fastapi.middleware.cors import CORSMiddleware
-
 from notes_service.routers.notes import router as notes_router
 
-app = FastAPI()
+instrumentator = Instrumentator()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    create_table()
+    instrumentator.expose(app)
+    yield
+
+app = FastAPI(lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -17,12 +26,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-create_table()
-
+instrumentator.instrument(app)
 
 app.include_router(notes_router)
 
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy"}
 
 @app.get("/test")
 def test():
@@ -37,4 +47,4 @@ async def root():
     return {"message": "Notes Service"}
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", reload=True, port=8001)
+    uvicorn.run("main:app", host="0.0.0.0", port=8001, reload=True)

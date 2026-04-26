@@ -51,5 +51,8 @@ htmlcov/
 # Others
 *.env
 
+# Claude Code
+CLAUDE.md
+
 # Node.js dependencies
 node_modules/

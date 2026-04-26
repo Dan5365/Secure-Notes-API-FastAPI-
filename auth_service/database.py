@@ -1,18 +1,26 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, declarative_base
+import os
 
-engine = create_engine("sqlite:///users.db", connect_args={"check_same_thread": False})
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-Base = declarative_base()
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
+from sqlalchemy.orm import DeclarativeBase
+
+if os.getenv("DOCKER_MODE"):
+    DB_PATH = "/app/data/users.db"
+else:
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    DATA_DIR = os.path.join(BASE_DIR, "data")
+    if not os.path.exists(DATA_DIR):
+        os.makedirs(DATA_DIR)
+    DB_PATH = os.path.join(DATA_DIR, "users.db")
 
 
-def create_table():
-    Base.metadata.create_all(bind=engine)
+
+engine = create_async_engine(f"sqlite+aiosqlite:///{DB_PATH}")
+AsyncSessionLocal = async_sessionmaker(engine, expire_on_commit=False)
 
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+async def get_db_session():
+    async with AsyncSessionLocal() as session:
+        yield session
+
+class Base(DeclarativeBase):
+    pass

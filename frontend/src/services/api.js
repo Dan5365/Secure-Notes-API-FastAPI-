@@ -9,12 +9,17 @@ const api = axios.create({
   baseURL: AUTH_API,
 });
 
-// Добавляем токен к каждому запросу
+
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
-  if (token) {
+   if (
+    token &&
+    !config.url.includes('/auth/login') &&
+    !config.url.includes('/auth/register')
+  ) {
     config.headers.Authorization = `Bearer ${token}`;
   }
+
   return config;
 });
 
@@ -67,10 +72,10 @@ export const getUserRole = () => {
 
 export const authAPI = {
   register: (username, age, password) =>
-    api.post('/users/register', { username, age, password }),
+    api.post('/auth/register', { username, age, password }),
 
   login: (username, password) =>
-    api.post('/users/login', new URLSearchParams({
+    api.post('/auth/login', new URLSearchParams({
       username,
       password
     }), {
@@ -87,15 +92,15 @@ export const authAPI = {
 export const adminAPI = {
   // Получить всех пользователей
   getAllUsers: () =>
-    api.get('/users/users'),
+    api.get('/users'),
 
   // Получить пользователя по username
   getUserByUsername: (username) =>
-    api.get(`/users/users/by-username/${username}`),
+    api.get(`/users/by-username/${username}`),
 
   // Сделать пользователя админом/креатором
   makeAdmin: (userId, role) =>
-    api.post(`/users/users/${userId}/make-admin`, { role }),
+    api.post(`/users/${userId}/make-admin`, { role }),
 };
 
 export const notes = {

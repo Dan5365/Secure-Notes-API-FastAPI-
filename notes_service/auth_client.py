@@ -3,10 +3,8 @@ from fastapi.security import HTTPBearer
 import requests
 import os
 
-if os.getenv("DOCKER_ENV") == "1":
-    AUTH_URL = "http://auth-service:8000"
-else:
-    AUTH_URL = "http://localhost:8000"
+AUTH_URL = os.getenv("AUTH_SERVICE_URL") or "http://localhost:8000"
+
 
 security = HTTPBearer()
 

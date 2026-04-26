@@ -8,7 +8,7 @@ import json, re
 
 router = APIRouter(prefix="/ai", tags=["AI Assistant"])
 
-# ===== CONFIG =====
+
 GEMINI_API_KEY = "AIzaSyDDvYgSKYe2oDrMJM2W84QWE0kOfbtj2RU"
 if not GEMINI_API_KEY:
     raise RuntimeError("GEMINI_API_KEY not set")
@@ -19,7 +19,7 @@ genai.configure(api_key=GEMINI_API_KEY)
 MODEL_NAME = "gemini-2.5-flash-lite"
 
 
-# ===== SCHEMAS =====
+
 class NoteData(BaseModel):
     title: str
     content: str
@@ -35,7 +35,7 @@ class AnalyzeRequest(BaseModel):
     notes: List[NoteData]
 
 
-# ===== IMPROVE NOTE =====
+
 @router.post("/improve-note")
 async def improve_note(req: ImproveNoteRequest):
     """Улучшение заметки через Gemini"""
