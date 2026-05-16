@@ -53,3 +53,16 @@ htmlcov/
 
 # Node.js dependencies
 node_modules/
+# Runtime data
+grafana_data/
+prometheus_data/
+auth_service/data/
+notes_service/data/
+*.db
+
+# Runtime data
+grafana_data/
+prometheus_data/
+auth_service/data/
+notes_service/data/
+*.db
