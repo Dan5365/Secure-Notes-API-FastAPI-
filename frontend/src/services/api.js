@@ -1,8 +1,8 @@
 // src/services/api.js
 import axios from 'axios';
 
-const AUTH_API = 'http://localhost:8000';
-const NOTES_API = 'http://localhost:8001';
+const AUTH_API = 'http://51.21.108.193:8000';
+const NOTES_API = 'http://51.21.108.193:8001';
 
 // Основной экземпляр для auth сервиса
 const api = axios.create({
@@ -14,6 +14,7 @@ api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
+
   }
   return config;
 });
@@ -67,10 +68,10 @@ export const getUserRole = () => {
 
 export const authAPI = {
   register: (username, age, password) =>
-    api.post('/users/register', { username, age, password }),
+    api.post('/auth/register', { username, age, password }),
 
   login: (username, password) =>
-    api.post('/users/login', new URLSearchParams({
+    api.post('/auth/login', new URLSearchParams({
       username,
       password
     }), {
