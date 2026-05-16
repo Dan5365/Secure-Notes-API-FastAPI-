@@ -48,6 +48,7 @@ services:
     networks:
       - secure_net
 
+
   node-exporter:
     image: prom/node-exporter:latest
     deploy:
@@ -66,6 +67,14 @@ services:
     networks:
       - secure_net
 
+  alertmanager:
+    image: prom/alertmanager:latest
+    ports:
+      - "9093:9093"
+    volumes:
+      - ./alertmanager.yml:/etc/alertmanager/alertmanager.yml
+    networks:
+      - secure_net
 networks:
   secure_net:
     driver: overlay
